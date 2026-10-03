@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Cuenta</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+    <script>
+        const token = sessionStorage.getItem('token');
+        if (!token) window.location.href = '/signIn';
+    </script>
+</head>
+<body class="grey lighten-4">
+    <div class="container" style="margin-top: 50px; max-width: 600px;">
+        <div class="card">
+            <div class="card-content">
+                <span class="card-title center-align">Información de mi Cuenta</span>
+                <div class="center-align" style="margin-bottom:20px;">
+                    <img id="profilePic" src="https://placeholder.com" alt="Avatar" class="circle responsive-img" style="width:120px; height:120px; object-fit:cover;">
+                </div>
+                <div class="divider"></div>
+                <div style="margin-top: 20px;">
+                    <p><strong>Nombre completo:</strong> <span id="profName">...</span></p>
+                    <p><strong>Email:</strong> <span id="profEmail">...</span></p>
+                    <p><strong>Roles asignados:</strong> <span id="profRoles">...</span></p>
+                </div>
+            </div>
+            <div class="card-action">
+                <a href="#" id="backBtn" class="blue-text">Regresar al Panel</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = sessionStorage.getItem('token');
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            
+            // Configurar botón dinámico de regreso según rol
+            document.getElementById('backBtn').href = payload.roles.includes('admin') ? '/dashboard-admin' : '/dashboard-user';
+
+            try {
+                const res = await fetch('/api/users/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                const user = await res.json();
+                
+                if (res.ok) {
+                    document.getElementById('profName').innerText = `${user.name}`;
+                    document.getElementById('profEmail').innerText = user.email;
+                    document.getElementById('profRoles').innerText = user.roles.join(', ');
+                    if(user.url_profile) {
+                        document.getElementById('profilePic').src = user.url_profile;
+                    }
+                }
+            } catch (err) {
+                console.error("Error cargando perfil", err);
+            }
+        });
+    </script>
+</body>
+</html>

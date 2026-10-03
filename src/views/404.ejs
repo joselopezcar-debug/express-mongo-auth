@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Página no encontrada</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" rel="stylesheet">
+</head>
+<body class="valign-wrapper grey lighten-4" style="height: 100vh;">
+    <div class="container center-align">
+        <h1 class="blue-text text-darken-2">404</h1>
+        <h3>Página No Encontrada</h3>
+        <p class="flow-text">El recurso o enlace al que intentas acceder no existe en el sistema.</p>
+        <button class="btn blue waves-effect waves-light" onclick="goBack()">Volver a mi Panel</button>
+    </div>
+
+    <script>
+        function goBack() {
+            const token = sessionStorage.getItem('token');
+            if (!token) {
+                window.location.href = '/signIn';
+                return;
+            }
+            try {
+                const payload = JSON.parse(atob(token.split('.')));
+                if (payload.roles.includes('admin')) {
+                    window.location.href = '/dashboard-admin';
+                } else {
+                    window.location.href = '/dashboard-user';
+                }
+            } catch (e) {
+                window.location.href = '/signIn';
+            }
+        }
+    </script>
+</body>
+</html>

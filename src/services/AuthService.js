@@ -5,34 +5,54 @@ import roleRepository from '../repositories/RoleRepository.js';
 
 class AuthService {
 
-    async signUp({ email, password, name, roles = ['user'] }) {
-        const existing = await userRepository.findByEmail(email);
-        if (existing) {
-            const err = new Error('El email ya se encuentra en uso');
-            err.status = 400;
-            throw err;
-        }
-
-        //lógica par encriptar el password
-        const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS ?? '10', 10);
-        const hashed = await bcrypt.hash(password, saltRounds);
-
-        // Asignar los role ids
-        const roleDocs = [];
-        for (const r of roles) {
-            let roleDoc = await roleRepository.findByName(r);
-            if (!roleDoc) roleDoc = await roleRepository.create({ name: r });
-            roleDocs.push(roleDoc._id);
-        }
-
-        const user = await userRepository.create({ email, password: hashed, name, roles: roleDocs });
-
-        return {
-                id: user._id,
-                email: user.email,
-                name: user.name
-            };
+    async signUp({ email, password, name, lastName, phoneNumber, birthdate, address, url_profile, roles = ['user'] }) {
+    const existing = await userRepository.findByEmail(email);
+    if (existing) {
+        const err = new Error('El email ya se encuentra en uso');
+        err.status = 400;
+        throw err;
     }
+
+    // Lógica para validar la complejidad del password
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d)(?=.*[#$%%&*@])[A-Za-z\d#$%%&*@]{8,}$/;
+    if (!passwordRegex.test(password)) {
+        const err = new Error('La contraseña debe tener al menos 8 caracteres, una mayúscula, un número y un carácter especial (#$%&*@)');
+        err.status = 400;
+        throw err;
+    }
+
+    // Lógica para encriptar el password
+    const saltRounds = parseInt(process.env.BCRYPT_SALT_ROUNDS ?? '10', 10);
+    const hashed = await bcrypt.hash(password, saltRounds);
+
+    // Asignar los role ids
+    const roleDocs = [];
+    for (const r of roles) {
+        let roleDoc = await roleRepository.findByName(r);
+        if (!roleDoc) roleDoc = await roleRepository.create({ name: r });
+        roleDocs.push(roleDoc._id);
+    }
+
+    // Pasar TODOS los campos requeridos al repositorio para que Mongoose no lance error
+    const user = await userRepository.create({ 
+        email, 
+        password: hashed, 
+        name, 
+        lastName, 
+        phoneNumber, 
+        birthdate, 
+        address, 
+        url_profile, 
+        roles: roleDocs 
+    });
+
+    return {
+        id: user._id,
+        email: user.email,
+        name: user.name,
+        lastName: user.lastName
+    };
+}
 
     async signIn({ email, password }) {
         const user = await userRepository.findByEmail(email);
