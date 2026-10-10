@@ -18,10 +18,10 @@ MONGO_URI=mongodb+srv://<db_username>:<db_password>@cluster0.z8ab90g.mongodb.net
 
 Para levantar el proyecto localmente o configurar el entorno de producción de forma segura en el dashboard de Render, sigue estos pasos:
 
-1. Localiza el archivo **`.env.example`** en la raíz del proyecto.
-2. Crea una copia de ese archivo y renombrala exactamente como **`.env`**.
-3. Abre tu nuevo archivo **`.env`** y reemplaza los marcadores `<db_username>` y `<db_password>` con tus credenciales personales de MongoDB Atlas (para este ejemplo, reemplazalos por "Alonso" y 01102006, o contactenos para crearle un usuario para crearle sus credenciales personales):
-
+1. Localiza el archivo .env.example en la raíz del proyecto.
+2. Crea una copia de ese archivo y renombrala exactamente como .env.
+3. Abre tu nuevo archivo .env y reemplaza los marcadores <db_username> y <db_password> con tus credenciales personales de MongoDB Atlas. 
+   *(Por ejemplo, si tu usuario fuera "Alonso" y tu clave "Clave123", debes reemplazar esos campos exactamente por tus valores, o contáctanos para asignarte un usuario temporal con credenciales de pruebas).*
 
 *Nota: Asegúrate de que el archivo `.env` real esté incluido en tu `.gitignore` para evitar subir tus claves de producción a GitHub.*
 
