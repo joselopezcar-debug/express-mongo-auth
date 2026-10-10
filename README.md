@@ -1,30 +1,29 @@
-# 🚀 Express Mongo Auth API con JWT
+# 🚀 Express Mongo Auth Web App con JWT
 
-Este proyecto consiste en un API REST desarrollada con **Node.js**, **Express** y **Mongoose**, que implementa un sistema completo de autenticación y autorización utilizando **JSON Web Tokens (JWT)** y cifrado de contraseñas con **Bcrypt**. El proyecto se encuentra desplegado en la nube utilizando **Render** y cuenta con un pipeline de integración y despliegue continuo (CI/CD) mediante **GitHub Actions**.
+Esta es una aplicación web full-stack desarrollada con **Node.js**, **Express**, **EJS** y **Mongoose**. Implementa un sistema completo de autenticación y autorización visual utilizando **JSON Web Tokens (JWT)** y cifrado de contraseñas con **Bcrypt**. El proyecto se encuentra completamente desplegado en la nube a través de **Render** y cuenta con automatización CI/CD mediante **GitHub Actions**.
 
 ---
 
 ## 🗄️ Configuración de la Base de Datos en la Nube
 
-Para el almacenamiento de datos se utiliza un clúster en **MongoDB Atlas**. La cadena de conexión configurada para interactuar con la base de datos `auth_db` es la siguiente:
+Para la persistencia de datos se utiliza un clúster en **MongoDB Atlas**. Por motivos de seguridad y para evitar la filtración de credenciales en el repositorio público, la cadena de conexión se maneja de manera oculta a través de variables de entorno siguiendo esta estructura base:
 
 ```env
-MONGO_URI=mongodb+srv://Alonso:01102006@cluster0.z8ab90g.mongodb.net/auth_db?retryWrites=true&w=majority
+MONGO_URI=mongodb+srv://<db_username>:<db_password>@cluster0.z8ab90g.mongodb.net/auth_db?retryWrites=true&w=majority
 ```
 
 ---
 
-## ⚙️ Variables de Entorno Requeridas (.env)
+## ⚙️ Guía de Configuración de Variables de Entorno
 
-Para desplegar el proyecto localmente o en la nube (Render), se deben configurar las siguientes variables en el archivo `.env` en la raíz del proyecto:
+Para levantar el proyecto localmente o configurar el entorno de producción de forma segura en el dashboard de Render, sigue estos pasos:
 
-```env
-PORT=3000
-MONGO_URI=mongodb+srv://Alonso:01102006@cluster0.z8ab90g.mongodb.net/auth_db?retryWrites=true&w=majority
-JWT_SECRET=f14e6a1c9843c52190c07232dfb9c0e467d5a910
-JWT_EXPIRES_IN=6h
-BCRYPT_SALT_ROUNDS=10
-```
+1. Localiza el archivo **`.env.example`** en la raíz del proyecto.
+2. Crea una copia de ese archivo y renombrala exactamente como **`.env`**.
+3. Abre tu nuevo archivo **`.env`** y reemplaza los marcadores `<db_username>` y `<db_password>` con tus credenciales personales de MongoDB Atlas (para este ejemplo, reemplazalos por "Alonso" y 01102006, o contactenos para crearle un usuario para crearle sus credenciales personales):
+
+
+*Nota: Asegúrate de que el archivo `.env` real esté incluido en tu `.gitignore` para evitar subir tus claves de producción a GitHub.*
 
 ---
 
@@ -38,14 +37,14 @@ Al contar con un motor de plantillas integrado, el flujo de autenticación se ge
 
 ---
 
-## 🛠️ Instalación y Despliegue Local
+## 🛠️ Instalación y Ejecución Local
 
-1. Clonar el repositorio.
-2. Instalar las dependencias del proyecto:
+1. Clonar este repositorio.
+2. Instalar el árbol completo de dependencias de Node:
    ```bash
    npm install
    ```
-3. Iniciar el servidor en entorno de desarrollo con recarga automática:
+3. Iniciar el servidor local en modo de desarrollo con recarga automática:
    ```bash
    npm run dev
    ```
